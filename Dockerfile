@@ -1,5 +1,5 @@
 # Base image for the backend
-FROM node:20 AS backend-build
+FROM node:latest AS backend-build
 
 # Set the working directory for the backend
 WORKDIR /app/backend
@@ -17,7 +17,7 @@ EXPOSE 5000
 # Command to run the backend server
 
 # Base image for the frontend
-FROM node:20 AS frontend-build
+FROM node:18 AS frontend-build
 
 # Set the working directory for the frontend
 WORKDIR /app/frontend
@@ -39,7 +39,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Install bash and Node.js
-RUN apk add --no-cache bash nodejs npm
+RUN apk add bash nodejs npm
 
 # Copy custom Nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
@@ -52,8 +52,6 @@ COPY --from=backend-build /app/backend /app/backend
 
 # Expose the Nginx port
 EXPOSE 80
-
-
 
 # Start Nginx and the backend server
 CMD ["bash", "-c", "nginx -g 'daemon off;' & node /app/backend/server.js"]
