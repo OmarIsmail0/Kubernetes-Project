@@ -43,4 +43,4 @@ COPY --from=frontend-build /app/frontend/dist /usr/share/nginx/html
 EXPOSE 80
 
 # Start Nginx and the backend server
-CMD ["sh", "-c", "nginx -g 'daemon off;' & node /app/backend/server.js"]
+CMD ["nginx -g 'daemon off;' & node /app/backend/server.js"]
