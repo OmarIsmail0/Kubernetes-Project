@@ -41,6 +41,9 @@ FROM nginx:alpine
 # Install bash and Node.js
 RUN apk add --no-cache bash nodejs npm
 
+# Copy custom Nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
+
 # Copy the built frontend from the previous stage
 COPY --from=frontend-build /app/frontend/dist /usr/share/nginx/html
 
