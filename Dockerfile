@@ -23,7 +23,7 @@ RUN npm install
 COPY backend ./
 
 # Copy the frontend build from the frontend-build stage to the backend's public folder
-COPY --from=frontend-build /usr/src/app/frontend/build ./public
+COPY --from=frontend-build /usr/src/app/frontend/dist ./public
 
 # Expose the backend port
 EXPOSE 5000
