@@ -1,41 +1,56 @@
+# ===========================
+# Stage 1: Build Frontend
+# ===========================
 FROM node:18 AS frontend-build
 
-WORKDIR /usr/src/app
+# Set working directory
+WORKDIR /usr/src/frontend
 
+# Install frontend dependencies
 COPY frontend/package*.json ./
-
 RUN npm install
 
+# Copy frontend source code
 COPY frontend ./
 
+# Build the frontend
 RUN npm run build
 
-FROM nginx:alpine
+# ===========================
+# Stage 2: Backend Setup
+# ===========================
+FROM node:18 AS backend-build
 
-COPY --from=frontend-build /usr/src/app /usr/share/nginx/html
+# Set working directory for backend
+WORKDIR /usr/src/backend
 
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
-
-# Base image for the backend
-FROM node:latest AS backend-build
-
-# Set the working directory for the backend
-WORKDIR /usr/src/app
-
-# Copy backend package.json and install dependencies
+# Install backend dependencies
 COPY backend/package*.json ./
 RUN npm install
 
-# Copy the backend code
+# Copy backend source code
 COPY backend ./
 
-# Expose the backend port
-EXPOSE 5000
+# ===========================
+# Stage 3: Final Stage (Combine Frontend & Backend)
+# ===========================
+FROM nginx:alpine
 
-# Command to run the backend server
-CMD ["node", "server.js"]
+# Copy Nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# ---------------------------------------------------------------
+# Copy built frontend from Stage 1
+COPY --from=frontend-build /usr/src/frontend/build /usr/share/nginx/html
 
+# Copy backend code from Stage 2
+COPY --from=backend-build /usr/src/backend /app/backend
+
+# Expose both ports (Frontend on 80, Backend on 5000)
+EXPOSE 80 5000
+
+# Install necessary tools (for process management)
+RUN apk add --no-cache bash curl && \
+    npm install -g pm2
+
+# Command to start both Nginx and Node.js backend using pm2
+CMD ["sh", "-c", "pm2 start /app/backend/server.js && nginx -g 'daemon off;'"]
