@@ -23,9 +23,7 @@ FROM node:18 AS frontend-build
 WORKDIR /app/frontend
 
 # Copy frontend package.json and install dependencies
-COPY frontend/package.json ./
-
-
+COPY frontend/package*.json ./
 
 RUN npm install
 
