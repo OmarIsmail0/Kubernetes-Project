@@ -23,7 +23,7 @@ EXPOSE 5000
 FROM node:18 AS frontend-build
 
 # Set the working directory for the frontend
-WORKDIR /usr/src/app
+WORKDIR /app/frontend
 
 # Copy frontend package.json and install dependencies
 COPY frontend/package*.json ./
@@ -39,7 +39,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copy the built frontend from the previous stage
-COPY --from=frontend-build /usr/src/app/frontend/dist /usr/share/nginx/html
+COPY --from=frontend-build /app/frontend/dist /usr/share/nginx/html
 
 
 COPY start.sh /usr/local/bin/start.sh
