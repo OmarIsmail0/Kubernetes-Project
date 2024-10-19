@@ -40,7 +40,7 @@ FROM nginx:alpine
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy built frontend from Stage 1
-COPY --from=frontend-build /usr/src/frontend/build /usr/share/nginx/html
+COPY --from=frontend-build /usr/src/frontend/dist /usr/share/nginx/html
 
 # Copy backend code from Stage 2
 COPY --from=backend-build /usr/src/backend /app/backend
