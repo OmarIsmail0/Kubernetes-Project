@@ -20,4 +20,4 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:80"  # Expose the frontend on port 3000
+      - "5173:80"  # Expose the frontend on port 3000

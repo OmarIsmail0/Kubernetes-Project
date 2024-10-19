@@ -15,7 +15,7 @@ COPY backend ./
 EXPOSE 5000
 
 # Command to run the backend server
-CMD ["node", "server.js"]
+CMD ["node", "index.js"]
 
 # Base image for the frontend
 FROM node:20 AS frontend-build
@@ -37,7 +37,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copy the built frontend from the previous stage
-COPY --from=frontend-build /app/frontend/dist /usr/share/nginx/html
+COPY --from=frontend-build /app/frontend/build /usr/share/nginx/html
 
 # Copy the backend from the previous stage
 COPY --from=backend-build /app/backend /app/backend
@@ -46,4 +46,4 @@ COPY --from=backend-build /app/backend /app/backend
 EXPOSE 80
 
 # Start Nginx and the backend server
-CMD ["sh", "-c", "nginx -g 'daemon off;' & node /app/backend/server.js"]
+CMD ["sh", "-c", "nginx -g 'daemon off;' & node /app/backend/index.js"]
