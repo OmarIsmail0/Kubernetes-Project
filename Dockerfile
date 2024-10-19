@@ -2,7 +2,7 @@
 FROM node:latest AS backend-build
 
 # Set the working directory for the backend
-WORKDIR /app/backend
+WORKDIR /usr/src/app
 
 # Copy backend package.json and install dependencies
 COPY backend/package*.json ./
@@ -15,34 +15,26 @@ COPY backend ./
 EXPOSE 5000
 
 # Command to run the backend server
-# CMD ["node", "server.js"]
+CMD ["node", "server.js"]
 
 # ---------------------------------------------------------------
 
-# Base image for the frontend
 FROM node:18 AS frontend-build
 
-# Set the working directory for the frontend
-WORKDIR /app/frontend
+WORKDIR /usr/src/app
 
-# Copy frontend package.json and install dependencies
 COPY frontend/package*.json ./
+
 RUN npm install
 
-# Copy the frontend code
 COPY frontend ./
 
-# Build the frontend app
 RUN npm run build
 
-# Install Nginx to serve the frontend
 FROM nginx:alpine
 
-# Copy the built frontend from the previous stage
-COPY --from=frontend-build /app/frontend/dist /usr/share/nginx/html
+COPY --from=frontend-build /usr/src/app /usr/share/nginx/html
 
-# Expose the Nginx port
 EXPOSE 80
 
-# Start Nginx and the backend server
-CMD ["node", "app/backend/server.js"]
+CMD ["nginx", "-g", "daemon off;"]
