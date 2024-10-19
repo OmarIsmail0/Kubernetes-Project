@@ -45,4 +45,4 @@ COPY --from=frontend-build /app/frontend/dist /usr/share/nginx/html
 EXPOSE 80
 
 # Start Nginx and the backend server
-CMD ["node", "server.js"]
+CMD ["node", "app/backend/server.js"]
