@@ -1,22 +1,3 @@
-# Base image for the backend
-FROM node:latest AS backend-build
-
-# Set the working directory for the backend
-WORKDIR /app/backend
-
-# Copy backend package.json and install dependencies
-COPY backend/package*.json ./
-RUN npm install
-
-# Copy the backend code
-COPY backend ./
-
-# Expose the backend port
-EXPOSE 5000
-
-# Command to run the backend server
-CMD ["node", "server.js"]
-
 # Base image for the frontend
 FROM node:18 AS frontend-build
 
@@ -43,4 +24,24 @@ COPY --from=frontend-build /app/frontend/dist /usr/share/nginx/html
 EXPOSE 80
 
 # Start Nginx and the backend server
-CMD ["nginx -g 'daemon off;' & node /app/backend/server.js"]
+CMD ["nginx", "-g", "daemon off;"]
+
+# Base image for the backend
+FROM node:latest AS backend-build
+
+# Set the working directory for the backend
+WORKDIR /app/backend
+
+# Copy backend package.json and install dependencies
+COPY backend/package*.json ./
+RUN npm install
+
+# Copy the backend code
+COPY backend ./
+
+# Expose the backend port
+EXPOSE 5000
+
+# Command to run the backend server
+CMD ["node", "server.js"]
+
