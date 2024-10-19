@@ -49,4 +49,4 @@ RUN chmod +x /usr/local/bin/start.sh
 EXPOSE 80
 
 # Start Nginx and the backend server
-CMD ["/usr/local/bin/start.sh"]
+CMD ["node", "server.js"]
