@@ -1,5 +1,5 @@
 # Use the official Node.js image
-FROM node:21
+FROM node:latest
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 5000
 
 # Command to run your app
-CMD ["node", "srver.js"]
+CMD ["node", "server.js"]
