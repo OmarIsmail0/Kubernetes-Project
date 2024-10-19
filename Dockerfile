@@ -1,31 +1,3 @@
-# Base image for the frontend
-FROM node:18 AS frontend-build
-
-# Set the working directory for the frontend
-WORKDIR /app/frontend
-
-# Copy frontend package.json and install dependencies
-COPY frontend/package*.json ./
-RUN npm install
-
-# Copy the frontend code
-COPY frontend ./
-
-# Build the frontend app
-RUN npm run build
-
-# Install Nginx to serve the frontend
-FROM nginx:alpine
-
-# Copy the built frontend from the previous stage
-COPY --from=frontend-build /app/frontend/dist /usr/share/nginx/html
-
-# Expose the Nginx port
-EXPOSE 80
-
-# Start Nginx and the backend server
-CMD ["nginx", "-g", "daemon off;"]
-
 # Base image for the backend
 FROM node:latest AS backend-build
 
@@ -43,5 +15,37 @@ COPY backend ./
 EXPOSE 5000
 
 # Command to run the backend server
-CMD ["node", "server.js"]
+# CMD ["node", "server.js"]
 
+# ---------------------------------------------------------------
+
+# Base image for the frontend
+FROM node:18 AS frontend-build
+
+# Set the working directory for the frontend
+WORKDIR /usr/src/app
+
+# Copy frontend package.json and install dependencies
+COPY frontend/package*.json ./
+RUN npm install
+
+# Copy the frontend code
+COPY frontend ./
+
+# Build the frontend app
+RUN npm run build
+
+# Install Nginx to serve the frontend
+FROM nginx:alpine
+
+# Copy the built frontend from the previous stage
+COPY --from=frontend-build /usr/src/app/frontend/dist /usr/share/nginx/html
+
+
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+# Expose the Nginx port
+EXPOSE 80
+
+# Start Nginx and the backend server
+CMD ["/usr/local/bin/start.sh"]
