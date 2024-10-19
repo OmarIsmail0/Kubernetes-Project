@@ -41,6 +41,7 @@ FROM nginx:alpine
 # Copy the built frontend from the previous stage
 COPY --from=frontend-build /app/frontend/dist /usr/share/nginx/html
 
+COPY --from=backend-build /app/backend /app/backend
 
 COPY start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
