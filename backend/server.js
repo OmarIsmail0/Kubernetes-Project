@@ -6,7 +6,7 @@ const app = express();
 const PORT = 5000;
 
 // Get MongoDB connection string from environment variable
-const url = process.env.MONGO_URL || "mongodb://localhost:27017"; // Fallback for local development
+const url = process.env.MONGO_URL || "mongodb://mongo:27017/database"; // Fallback for local development
 const client = new MongoClient(url);
 
 app.use(cors()); // Allow all origins by default
