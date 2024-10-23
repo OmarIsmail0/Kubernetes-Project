@@ -1,12 +1,13 @@
 const express = require("express");
 const { MongoClient } = require("mongodb");
 const cors = require("cors"); // Import the cors package
-
+const path = require("path");
 const app = express();
 const PORT = 5000;
 
 // Get MongoDB connection string from environment variable
 const url = process.env.MONGO_URL || "mongodb://mongo:27017/database"; // Fallback for local development
+// const url = "mongodb://localhost:27017"; // Fallback for local development
 const client = new MongoClient(url);
 
 app.use(cors()); // Allow all origins by default
@@ -136,6 +137,12 @@ app.post("/insert-products", async (req, res) => {
     console.error("Error inserting products:", error);
     res.status(500).send("Error inserting products");
   }
+});
+
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // Start the server and connect to MongoDB
