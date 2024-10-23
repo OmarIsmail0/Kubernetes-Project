@@ -1,21 +1,10 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
-  name: my-app-deployment
+  name: private-reg
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: my-app
-  template:
-    metadata:
-      labels:
-        app: my-app
-    spec:
-      containers:
-        - name: my-app-container
-          image: omarismail0/kubernetes-project:latest
-          ports:
-            - containerPort: 80
-      imagePullSecrets:
-        - name: regcred
+  containers:
+    - name: private-reg-container
+      image: omarismail0/kubernetes-project:latest
+  imagePullSecrets:
+    - name: regcred
