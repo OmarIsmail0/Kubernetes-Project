@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-app # This label must match the Service selector
+  template:
+    metadata:
+      labels:
+        app: node-app # This is the label that the Service will look for
+    spec:
+      containers:
+        - name: node-app
+          image: omarismail0/kubernetes-project:latest # Replace with your Docker image
+          ports:
+            - containerPort: 5000 # Port your Node.js app listens on
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-app
+spec:
+  type: NodePort # Use NodePort to access from outside the cluster
+  ports:
+    - port: 5000 # Port that the service will expose
+      targetPort: 5000 # Port on the container
+      nodePort: 30000 # Optional: Specify a port for NodePort
+  selector:
+    app: node-app # This must match the Pod's label

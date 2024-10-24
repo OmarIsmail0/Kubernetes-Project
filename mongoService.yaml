@@ -5,7 +5,6 @@ services:
   mongo:
     image: mongo
     restart: always
-    # No environment variables for authentication
 
   mongo-express:
     image: mongo-express
