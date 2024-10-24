@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-app
+spec:
+  type: NodePort # Change this to LoadBalancer if on a cloud provider
+  ports:
+    - port: 5000 # The port that the service will expose
+      targetPort: 5000 # The port on the container
+      nodePort: 30000 # Optional: Specify a port for NodePort
+  selector:
+    app: node-app # Should match the labels of your pods
