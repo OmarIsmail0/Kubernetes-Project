@@ -1,55 +1,23 @@
-# Base image for the backend
+# Build Stage for the frontend
+FROM node:latest AS frontend-build
+WORKDIR /app/frontend
+COPY frontend/package.json ./
+RUN npm install
+COPY frontend ./
+RUN npm run build  # This will generate the static files (e.g., in /app/frontend/build)
+
+# Backend Stage
 FROM node:latest AS backend-build
-
-# Set the working directory for the backend
 WORKDIR /app/backend
-
-# Copy backend package.json and install dependencies
 COPY backend/package.json ./
 RUN npm install
-
-# Copy the backend code
 COPY backend ./
+
+# Copy the frontend static files to the backend
+COPY --from=frontend-build /app/frontend/dist /app/backend/public
 
 # Expose the backend port
 EXPOSE 5000
 
-# Command to run the backend server
-
-# Base image for the frontend
-FROM node:18 AS frontend-build
-
-# Set the working directory for the frontend
-WORKDIR /app/frontend
-
-# Copy frontend package.json and install dependencies
-COPY frontend/package*.json ./
-
-RUN npm install
-
-# Copy the frontend code
-COPY frontend ./
-
-# Build the frontend app
-RUN npm run build
-
-# Install Nginx to serve the frontend
-FROM nginx:alpine
-
-# Install bash and Node.js
-RUN apk add bash nodejs npm
-
-# Copy custom Nginx configuration
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Copy the built frontend from the previous stage
-COPY --from=frontend-build /app/frontend/dist /usr/share/nginx/html
-
-# Copy the backend from the previous stage
-COPY --from=backend-build /app/backend /app/backend
-
-# Expose the Nginx port
-EXPOSE 80
-
-# Start Nginx and the backend server
-CMD ["bash", "-c", "nginx -g 'daemon off;' & node /app/backend/server.js"]
+# Command to run the backend (which also serves frontend)
+CMD ["node", "server.js"]
