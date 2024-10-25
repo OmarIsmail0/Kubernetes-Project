@@ -23,9 +23,7 @@ Project Steps:
 	•	Access the service within the cluster							-/-
 	•	Ingress:
 	•	Install NGINX Ingress Controller: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-														   kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-
-	•	Create an Ingress YAML file to expose the service externally.
+	•	Create an Ingress YAML file to expose the service externally.   
 	•	Apply the Ingress to the KinD cluster
 	•	Access the service externally using the Ingress endpoint.
 	•	ConfigMap and Secret:

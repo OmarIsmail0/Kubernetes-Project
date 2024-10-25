@@ -33,22 +33,4 @@ spec:
   selector:
     app: node-app # This must match the Pod's label
 
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: node-app-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-spec:
-  rules:
-    - host: node-app.local # Replace with the desired hostname
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: node-app
-                port:
-                  number: 5000
+
