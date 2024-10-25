@@ -41,7 +41,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("http://172.18.0.4:30000/products")
+      .get("http://node-app:5000/products")
       .then((e) => setProducts(e.data))
       .catch((err) => console.log(err));
   }, []);
