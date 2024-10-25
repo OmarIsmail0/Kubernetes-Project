@@ -40,6 +40,8 @@ function App() {
   ];
 
   useEffect(() => {
+    console.log(import.meta.env.VITE_API_URL);
+
     axios
       .get("http://172.18.0.4:30000/products")
       .then((e) => setProducts(e.data))
