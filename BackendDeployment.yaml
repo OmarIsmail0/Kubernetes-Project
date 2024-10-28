@@ -44,7 +44,7 @@ metadata:
   namespace: default
 spec:
   type: ExternalName
-  externakName: node-app.default.svc.cluster.local
+  externakName: my.database.example.com
   ports:
     - port: 5000
       targetPort: 5000
