@@ -22,8 +22,6 @@ spec:
       labels:
         app: node-app
     spec:
-      type: ExternalName
-      externalName: node-app.default.svc.cluster.local
       containers:
         - name: node-app
           image: omarismail0/kubernetes-project:back-end
