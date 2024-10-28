@@ -43,5 +43,11 @@ metadata:
   name: node-app
   namespace: prod
 spec:
-  type: ExternalName
-  externalName: my.database.example.com
+  type: NodePort
+  externakName: node-app.prod.svc.cluster.local
+  ports:
+    - port: 5000
+      targetPort: 5000
+      nodePort: 30002
+  selector:
+    app: node-app
