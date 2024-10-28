@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
         - name: frontend-app
-          image: omarismail0/kubernetes-project:frontend
+          image: omarismail0/kubernetes-project:front-end
           ports:
-            - containerPort: 5173
+            - containerPort: 80
       imagePullSecrets:
         - name: regcred
 ---
@@ -27,8 +27,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 5173
-      targetPort: 5173
-      nodePort: 40000
+    - port: 80
+      targetPort: 80
+      nodePort: 30001
   selector:
     app: frontend-app
