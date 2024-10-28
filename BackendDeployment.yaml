@@ -42,11 +42,10 @@ kind: Service
 metadata:
   name: node-app
 spec:
-  type: ExternalName
-  externalName: test.com
+  type: NodePort
   ports:
     - port: 5000
       targetPort: 5000
-      nodePort: 30005
+      nodePort: 30002
   selector:
     app: node-app
