@@ -12,6 +12,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: node-app
+  namespace: default
 spec:
   replicas: 1
   selector:
@@ -22,12 +23,11 @@ spec:
       labels:
         app: node-app
     spec:
+      type: ExternalName
+      externalName: node-app.default.svc.cluster.local
       containers:
         - name: node-app
-          namespace: default
           image: omarismail0/kubernetes-project:back-end
-          type: ExternalName
-          externakName: node-app.default.svc.cluster.local
           ports:
             - containerPort: 5000
           volumeMounts:
