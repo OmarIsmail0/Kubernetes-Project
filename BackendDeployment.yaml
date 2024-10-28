@@ -43,7 +43,7 @@ metadata:
   name: node-app
   namespace: prod
 spec:
-  type: NodePort
+  type: ExternalName
   externalName: node-app.prod.svc.cluster.local
   ports:
     - port: 5000
