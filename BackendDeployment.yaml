@@ -44,10 +44,4 @@ metadata:
   namespace: prod
 spec:
   type: ExternalName
-  externakName: my.database.example.com
-  ports:
-    - port: 5000
-      targetPort: 5000
-      nodePort: 30002
-  selector:
-    app: node-app
+  externalName: my.database.example.com
