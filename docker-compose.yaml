@@ -1,18 +1,24 @@
 services:
-  app:
+  backend:
     build:
       context: .
-      dockerfile: Dockerfile  
+      dockerfile: Dockerfile
     ports:
-      - "5000:5000"  
-    environment:
-      - MONGO_URL=mongodb://mongo:27017/database  
+      - "5000:5000"  # Expose the backend port
     depends_on:
-      - mongo 
+      - mongo
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/database  # Connection string for MongoDB
 
   mongo:
     image: mongo:latest
     ports:
-      - "27017:27017"  
-    
+      - "27017:27017"
 
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"  # Expose the frontend on port 3000
+      
