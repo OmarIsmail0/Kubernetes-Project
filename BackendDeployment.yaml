@@ -43,7 +43,7 @@ metadata:
   name: node-app
   namespace: default
 spec:
-  type: NodePort
+  type: ExternalName
   externakName: node-app.default.svc.cluster.local
   ports:
     - port: 5000
