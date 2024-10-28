@@ -24,7 +24,10 @@ spec:
     spec:
       containers:
         - name: node-app
+          namespace: default
           image: omarismail0/kubernetes-project:back-end
+          type: ExternalName
+          externakName: node-app.default.svc.cluster.local
           ports:
             - containerPort: 5000
           volumeMounts:
