@@ -9,6 +9,12 @@ pipeline {
         KUBECONFIG = '/root/.kube/config'           
     }
     stages {
+        stage('Hello') {
+            steps {
+                echo 'Hello World'
+            }
+        }
+        
         stage('Checkout Code') {
             steps {
                 checkout scm
