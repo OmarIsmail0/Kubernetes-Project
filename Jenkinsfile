@@ -53,14 +53,24 @@ pipeline {
             }
         }
 
+        stage('Test kubectl') {
+            steps {
+                sh '''
+                export KUBECONFIG=/root/.kube/config
+                kubectl get nodes
+                '''
+            }
+        }
+
+
         stage('Apply Kubernetes Manifests') {
             steps {
                 sh '''
                 set -e
                 export KUBECONFIG=/root/.kube/config
-                kubectl apply -f k8s/FrontendDeployment.yaml
-                kubectl apply -f k8s/BackendDeployment.yaml
-                kubectl apply -f k8s/nodeDeployment.yaml
+                sudo kubectl apply -f k8s/FrontendDeployment.yaml
+                sudo kubectl apply -f k8s/BackendDeployment.yaml
+                sudo kubectl apply -f k8s/nodeDeployment.yaml
                 '''
             }
         }
