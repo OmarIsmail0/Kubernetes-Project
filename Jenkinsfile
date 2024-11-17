@@ -68,9 +68,9 @@ pipeline {
                 sh '''
                 set -e
                 export KUBECONFIG=/root/.kube/config
-                sudo kubectl apply -f k8s/FrontendDeployment.yaml
-                sudo kubectl apply -f k8s/BackendDeployment.yaml
-                sudo kubectl apply -f k8s/nodeDeployment.yaml
+                sudo kubectl apply -f k8s/FrontendDeployment.yaml --validate=false
+                sudo kubectl apply -f k8s/BackendDeployment.yaml --validate=false
+                sudo kubectl apply -f k8s/nodeDeployment.yaml --validate=false
                 '''
             }
         }
