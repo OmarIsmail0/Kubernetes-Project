@@ -14,12 +14,19 @@ pipeline {
                 echo 'Hello World'
             }
         }
-        
+
         stage('Checkout Code') {
             steps {
                 checkout scm
             }
         }
+        
+        stage('Check Docker Version') {
+            steps {
+                sh 'docker --version'  // Check if Docker is available
+            }
+        }
+
         stage('Build Frontend Image') {
             steps {
                 dir('frontend') {
@@ -46,10 +53,11 @@ pipeline {
             }
         }
 
-
         stage('Apply Kubernetes Manifests') {
             steps {
                 sh '''
+                set -e
+                export KUBECONFIG=/root/.kube/config
                 kubectl apply -f k8s/FrontendDeployment.yaml
                 kubectl apply -f k8s/BackendDeployment.yaml
                 kubectl apply -f k8s/nodeDeployment.yaml
