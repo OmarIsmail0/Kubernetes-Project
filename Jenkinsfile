@@ -57,7 +57,7 @@ pipeline {
             steps {
                 sh '''
                 export KUBECONFIG=/root/.kube/config
-                kubectl get nodes
+                kubectl version --client
                 '''
             }
         }
