@@ -62,6 +62,11 @@ pipeline {
             }
         }
 
+        stage("TESTING STAGE") {
+            steps {
+                sh 'curl -sI http://jenkins/ | grep CLI'
+            }
+        }
 
         stage('Apply Kubernetes Manifests') {
             steps {
