@@ -29,14 +29,14 @@ pipeline {
 
         stage('Build Frontend Image') {
             steps {
-                
+                dir('frontend'){
                     script {
                         docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}")
                         docker.withRegistry('', DOCKERHUB_CREDENTIALS_ID) {
                             docker.image("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}").push("${FRONTEND_TAG}")
                         }
                     }
-                
+                }
             }
         }
 
@@ -58,9 +58,9 @@ pipeline {
                 sh '''
                 set -e
                 export KUBECONFIG=/root/.kube/config
-                sudo kubectl apply -f k8s/FrontendDeployment.yaml
-                sudo kubectl apply -f k8s/BackendDeployment.yaml
-                sudo kubectl apply -f k8s/nodeDeployment.yaml
+                kubectl apply -f k8s/FrontendDeployment.yaml
+                kubectl apply -f k8s/BackendDeployment.yaml
+                kubectl apply -f k8s/nodeDeployment.yaml
                 '''
             }
         }
