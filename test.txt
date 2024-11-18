@@ -1,0 +1,15 @@
+docker run --rm -u root -p 8080:8080 -v jenkins-data:/var/jenkins_home -v $(which docker):/usr/bin/docker -v /var/run/docker.sock:/var/run/docker.sock -v "$HOME":/home jenkinsci/blueocean
+
+https://www.jenkins.io/doc/book/installing/kubernetes/
+https://acbb-197-46-12-148.ngrok-free.app
+
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+mv kubectl /usr/local/bin/
+
+docker run --rm -u root -p 8080:8080 \
+    -v jenkins-data:/var/jenkins_home \
+    -v $(which docker):/usr/bin/docker \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v "/root/.kube/config":/root/.kube/config \
+    jenkins/jenkins:lts-jdk17
