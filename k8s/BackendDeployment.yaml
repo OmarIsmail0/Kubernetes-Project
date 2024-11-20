@@ -32,10 +32,10 @@ spec:
               name: node-app-storage
       imagePullSecrets:
         - name: regcred
-      volumes:
-        - name: node-app-storage
-          persistentVolumeClaim:
-            claimName: node-app-pvc
+      # volumes:
+      #   - name: node-app-storage
+      #     persistentVolumeClaim:
+      #       claimName: node-app-pvc
 ---
 apiVersion: v1
 kind: Service

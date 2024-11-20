@@ -91,16 +91,7 @@ pipeline {
             }
         }
 
-        stage('Apply Kubernetes Volumes') {
-            steps {
-                sh '''
-                set -e
-                export KUBECONFIG=~/.kube/config
-                sudo kubectl create -f k8s/presistent_volume.yml --validate=false
-                sudo kubectl create -f k8s/presistent_volume_claim.yml --validate=false
-                '''
-            }
-        }
+      
     }
     post {
         always {
