@@ -86,7 +86,7 @@ pipeline {
                 export KUBECONFIG=~/.kube/config
                 sudo kubectl apply -f k8s/FrontendDeployment.yaml 
                 sudo kubectl apply -f k8s/BackendDeployment.yaml 
-                sudo kubectl apply -f k8s/nodeDeployment.yaml 
+                sudo kubectl apply -f k8s/mongo-k8s.yml 
                 kubectl apply -f k8s/presistent_volume.yml
                 kubectl apply -f k8s/presistent_volume_claim.yml
                 '''
