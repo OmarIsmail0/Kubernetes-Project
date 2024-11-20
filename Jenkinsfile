@@ -73,15 +73,9 @@ pipeline {
         stage('Test kubectl') {
             steps {
                 sh '''
-                export KUBECONFIG=/root/.kube/config
+                export KUBECONFIG=~/.kube/config
                 kubectl version --client
                 '''
-            }
-        }
-
-        stage("TESTING STAGE") {
-            steps {
-                sh 'curl -sI http://jenkins/ | grep CLI'
             }
         }
 
@@ -89,7 +83,7 @@ pipeline {
             steps {
                 sh '''
                 set -e
-                export KUBECONFIG=/root/.kube/config
+                export KUBECONFIG=~/.kube/config
                 sudo kubectl apply -f k8s/FrontendDeployment.yaml --validate=false
                 sudo kubectl apply -f k8s/BackendDeployment.yaml --validate=false
                 sudo kubectl apply -f k8s/nodeDeployment.yaml --validate=false
