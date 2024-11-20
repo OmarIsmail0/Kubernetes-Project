@@ -87,8 +87,6 @@ pipeline {
                 sudo kubectl apply -f k8s/FrontendDeployment.yaml --validate=false
                 sudo kubectl apply -f k8s/BackendDeployment.yaml --validate=false
                 sudo kubectl apply -f k8s/mongo-k8s.yml --validate=false
-                sudo kubectl create -f k8s/presistent_volume.yml --validate=false
-                sudo kubectl create -f k8s/presistent_volume_claim.yml --validate=false
                 '''
             }
         }
