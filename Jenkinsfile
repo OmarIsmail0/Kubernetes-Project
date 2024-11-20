@@ -87,8 +87,19 @@ pipeline {
                 sudo kubectl apply -f k8s/FrontendDeployment.yaml --validate=false
                 sudo kubectl apply -f k8s/BackendDeployment.yaml --validate=false
                 sudo kubectl apply -f k8s/mongo-k8s.yml --validate=false
-                kubectl create -f k8s/presistent_volume.yml --validate=false
-                kubectl create -f k8s/presistent_volume_claim.yml --validate=false
+                sudo kubectl create -f k8s/presistent_volume.yml --validate=false
+                sudo kubectl create -f k8s/presistent_volume_claim.yml --validate=false
+                '''
+            }
+        }
+
+        stage('Apply Kubernetes Volumes') {
+            steps {
+                sh '''
+                set -e
+                export KUBECONFIG=~/.kube/config
+                sudo kubectl create -f k8s/presistent_volume.yml --validate=false
+                sudo kubectl create -f k8s/presistent_volume_claim.yml --validate=false
                 '''
             }
         }
