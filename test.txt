@@ -1,7 +1,12 @@
 docker run --rm -u root -p 8080:8080 -v jenkins-data:/var/jenkins_home -v $(which docker):/usr/bin/docker -v /var/run/docker.sock:/var/run/docker.sock -v "$HOME":/home jenkinsci/blueocean
 
+<<<<<<< HEAD
 https://0498-41-38-220-34.ngrok-free.app/
 
+=======
+https://www.jenkins.io/doc/book/installing/kubernetes/
+https://acbb-197-46-12-148.ngrok-free.app
+>>>>>>> f4a761bf74b51e0966ef668479f12d3f3d3e5d29
 
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x kubectl

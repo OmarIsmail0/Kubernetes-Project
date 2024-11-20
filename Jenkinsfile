@@ -6,7 +6,8 @@ pipeline {
         BACKEND_TAG = 'back-end'
         DOCKERHUB_USERNAME = 'omarismail0'            
         DOCKERHUB_REPOSITORY = 'kubernetes-project'   
-        KUBECONFIG = '/root/.kube/config'           
+        KUBECONFIG = '/root/.kube/config'     
+        DOCKER_REGISTRY = 'https://index.docker.io/v1/' // Update for custom registries
     }
     stages {
         stage('Hello') {
@@ -24,6 +25,22 @@ pipeline {
         stage('Check Docker Version') {
             steps {
                 sh 'docker --version'  // Check if Docker is available
+            }
+        }
+
+         stages {
+            stage('Docker Login') {
+                steps {
+                    script {
+                        withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', 
+                                                        usernameVariable: 'DOCKER_USERNAME', 
+                                                        passwordVariable: 'DOCKER_PASSWORD')]) {
+                            sh """
+                            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin $DOCKER_REGISTRY
+                            """
+                        }
+                    }
+                }
             }
         }
 
