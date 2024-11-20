@@ -27,15 +27,15 @@ spec:
           image: omarismail0/kubernetes-project:back-end
           ports:
             - containerPort: 5000
-          # volumeMounts:
-          #   - mountPath: /data
-          #     name: node-app-storage
+          volumeMounts:
+            - mountPath: /data
+              name: node-app-storage
       imagePullSecrets:
         - name: regcred
-      # volumes:
-      #   - name: node-app-storage
-      #     persistentVolumeClaim:
-      #       claimName: node-app-pvc
+      volumes:
+        - name: node-app-storage
+          persistentVolumeClaim:
+            claimName: node-app-pvc
 ---
 apiVersion: v1
 kind: Service
