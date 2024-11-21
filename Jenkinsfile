@@ -49,9 +49,8 @@ pipeline {
             steps {
                 dir('frontend'){
                     script {
-                        sh 'docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG} frontend/Dockerfile'
-                        //docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}", "-f ./frontend/ .")
-                        // def frontendImage = docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}", "-f frontend/Dockerfile .")
+                        // docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}", "-f ./frontend/ .")
+                        docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}", "-f frontend/Dockerfile frontend")
                         docker.withRegistry('', DOCKERHUB_CREDENTIALS_ID) {
                             docker.image("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}").push("${FRONTEND_TAG}")
                         }
