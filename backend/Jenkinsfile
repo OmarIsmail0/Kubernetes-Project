@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+    environment {
+        DOCKERHUB_CREDENTIALS_ID = 'dockerhub-creds'  
+        BACKEND_TAG = 'back-end'
+        DOCKERHUB_USERNAME = 'omarismail0'            
+        DOCKERHUB_REPOSITORY = 'kubernetes-project'   
+    }
+    stages {
+       
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build Backend Image') {
+            steps {
+                dir('backend') {
+                    script {
+                        def backendImage = docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${BACKEND_TAG}", )
+                        docker.withRegistry('', DOCKERHUB_CREDENTIALS_ID) {
+                            docker.image(backendImage).push()
+                        }
+                    }
+                }
+            }
+        }
+
+
+        stage('Apply Kubernetes Manifests') {
+            steps {
+                sh '''
+                set -e
+                export KUBECONFIG=~/.kube/config
+                sudo kubectl apply -f k8s/BackendDeployment.yaml --validate=false
+                sudo kubectl apply -f k8s/mongo-k8s.yml --validate=false
+                sudo kubectl create -f k8s/presistent_volume.yml --validate=false
+                sudo kubectl create -f k8s/presistent_volume_claim.yml --validate=false
+                '''
+            }
+        }
+
+      
+    }
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
