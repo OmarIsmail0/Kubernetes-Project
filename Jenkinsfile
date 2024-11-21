@@ -29,14 +29,13 @@ pipeline {
             }
         }
 
-         
-        stages {
-            stage('Check Workspace') {
-                steps {
-                    sh 'ls -R' // List all files and directories in the workspace
-                }
+        
+        stage('Check Workspace') {
+            steps {
+                sh 'ls -R' // List all files and directories in the workspace
             }
         }
+        
         
         stage('Docker Login') {
             steps {
