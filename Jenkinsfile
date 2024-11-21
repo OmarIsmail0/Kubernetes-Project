@@ -8,6 +8,7 @@ pipeline {
         DOCKERHUB_REPOSITORY = 'kubernetes-project'   
         KUBECONFIG = '/root/.kube/config'     
         DOCKER_REGISTRY = 'https://index.docker.io/v1/' // Update for custom registries
+        
     }
     stages {
         stage('Hello') {
@@ -48,10 +49,11 @@ pipeline {
             steps {
                 dir('frontend'){
                     script {
+                        sh 'docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG} ./frontend/Dockerfile'
                         //docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}", "-f ./frontend/ .")
-                        def frontendImage = docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}", "-f frontend/Dockerfile .")
+                        // def frontendImage = docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}", "-f frontend/Dockerfile .")
                         docker.withRegistry('', DOCKERHUB_CREDENTIALS_ID) {
-                            docker.image(frontendImage).push()
+                            docker.image("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}").push("${FRONTEND_TAG}")
                         }
                     }
                 }
