@@ -48,9 +48,10 @@ pipeline {
             steps {
                 dir('frontend'){
                     script {
-                        docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}", "-f ./frontend/ .")
+                        //docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}", "-f ./frontend/ .")
+                        def frontendImage = build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}", "./frontend")
                         docker.withRegistry('', DOCKERHUB_CREDENTIALS_ID) {
-                            docker.image("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}").push("${FRONTEND_TAG}")
+                            docker.image(frontendImage).push()
                         }
                     }
                 }
@@ -61,9 +62,9 @@ pipeline {
             steps {
                 dir('backend') {
                     script {
-                        docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${BACKEND_TAG}", "-f ./backend/ .")
+                        def backendImage = docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${BACKEND_TAG}", "./backend")
                         docker.withRegistry('', DOCKERHUB_CREDENTIALS_ID) {
-                            docker.image("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${BACKEND_TAG}").push("${BACKEND_TAG}")
+                            docker.image(backendImage).push()
                         }
                     }
                 }
