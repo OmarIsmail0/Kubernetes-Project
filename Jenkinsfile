@@ -30,6 +30,14 @@ pipeline {
         }
 
          
+        stages {
+            stage('Check Workspace') {
+                steps {
+                    sh 'ls -R' // List all files and directories in the workspace
+                }
+            }
+        }
+        
         stage('Docker Login') {
             steps {
                 script {
@@ -50,7 +58,7 @@ pipeline {
                 dir('frontend'){
                     script {
                         // docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}", "-f ./frontend/ .")
-                        docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}", "-f frontend/Dockerfile frontend")
+                        docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}")
                         docker.withRegistry('', DOCKERHUB_CREDENTIALS_ID) {
                             docker.image("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}").push("${FRONTEND_TAG}")
                         }
@@ -63,7 +71,7 @@ pipeline {
             steps {
                 dir('backend') {
                     script {
-                        def backendImage = docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${BACKEND_TAG}", "-f backend/Dockerfile .")
+                        def backendImage = docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${BACKEND_TAG}")
                         docker.withRegistry('', DOCKERHUB_CREDENTIALS_ID) {
                             docker.image(backendImage).push()
                         }
