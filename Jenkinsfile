@@ -49,7 +49,7 @@ pipeline {
                 dir('frontend'){
                     script {
                         //docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}", "-f ./frontend/ .")
-                        def frontendImage = build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}", "./frontend")
+                        def frontendImage = docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}", "./frontend")
                         docker.withRegistry('', DOCKERHUB_CREDENTIALS_ID) {
                             docker.image(frontendImage).push()
                         }
