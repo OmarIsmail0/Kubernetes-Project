@@ -70,9 +70,9 @@ pipeline {
             steps {
                 dir('backend') {
                     script {
-                        def backendImage = docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${BACKEND_TAG}")
+                        docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${BACKEND_TAG}")
                         docker.withRegistry('', DOCKERHUB_CREDENTIALS_ID) {
-                            docker.image(backendImage).push()
+                            docker.image("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${BACKEND_TAG}").push("${BACKEND_TAG}")
                         }
                     }
                 }
