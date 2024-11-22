@@ -101,7 +101,7 @@ pipeline {
         //         kubectl apply -f k8s/mongo-k8s.yml --validate=false
         //         '''
         //     }
-        }
+        // }
 
         stage('Apply Kubernetes Volumes') {
             steps {
