@@ -44,7 +44,7 @@ function App() {
 
     axios
       .get("products", {
-        baseURL: "server.localdev.me:8089",
+        baseURL: "http://server.localdev.me:8089",
       })
       .then((e) => setProducts(e.data))
       .catch((err) => console.log(err));

@@ -99,12 +99,14 @@ pipeline {
 
                 echo "Starting port forwarding for frontend..."
                 kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8090:80 &
+                echo $! > frontend_pid.txt  # Save the PID of the port-forward process
 
                 kubectl create ingress server-localhost --class=nginx \
                 --rule="server.localdev.me/*=node-app:5000"   
 
                 echo "Starting port forwarding for backend..."
                 kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8089:80 &
+                echo $! > backend_pid.txt  # Save the PID of the backend port-forward process
                 '''
             }
         }
@@ -112,7 +114,16 @@ pipeline {
     }
     post {
         always {
-            cleanWs()
+             script {
+                // Clean up port-forwarding processes by killing them using their PID
+                sh '''
+                echo "Killing port-forward for frontend..."
+                kill $(cat frontend_pid.txt)
+
+                echo "Killing port-forward for backend..."
+                kill $(cat backend_pid.txt)
+                '''
+            }
         }
     }
 }
