@@ -92,11 +92,17 @@ pipeline {
         stage("ingress service"){
             steps{
                 sh '''
-                set -e
-                export KUBECONFIG=~/jenkins_home/.kube/config
-                kubectl apply -f k8s/FrontendIngress.yaml
-                kubectl apply -f k8s/BackendIngress.yaml
-                kubectl apply -f k8s/PortServiceIngress.yaml
+                kubectl create ingress front-localhost --class=nginx \
+                --rule="front.localdev.me/*=product:80"
+
+                echo "Starting port forwarding for frontend..."
+                kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8090:80 &
+
+                kubectl create ingress server-localhost --class=nginx \
+                --rule="server.localdev.me/*=node-app:5000"   
+
+                echo "Starting port forwarding for backend..."
+                kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8089:80 &
                 '''
             }
         }
