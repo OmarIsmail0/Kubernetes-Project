@@ -2,8 +2,8 @@ pipeline {
     agent any
     environment {
         DOCKERHUB_CREDENTIALS_ID = 'dockerhub-creds'  
-        FRONTEND_TAG = 'frontend4'
-        BACKEND_TAG = 'backend4'
+        FRONTEND_TAG = 'frontend5'
+        BACKEND_TAG = 'backend5'
         DOCKERHUB_USERNAME = 'omarismail0'            
         DOCKERHUB_REPOSITORY = 'kubernetes-project'   
         KUBECONFIG = '~/jenkins_home/.kube/config'     

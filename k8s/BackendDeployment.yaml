@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: node-app
-          image: omarismail0/kubernetes-project:backend4
+          image: omarismail0/kubernetes-project:backend5
           ports:
             - containerPort: 5000
           volumeMounts:
