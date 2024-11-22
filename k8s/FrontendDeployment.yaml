@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend-app
-          image: omarismail0/kubernetes-project:front-end
+          image: omarismail0/kubernetes-project:frontend3
           ports:
             - containerPort: 80
       imagePullSecrets:
