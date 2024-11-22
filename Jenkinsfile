@@ -69,7 +69,7 @@ pipeline {
             steps {
                 sh '''
                 set -e
-                export KUBECONFIG=~/.kube/config
+                export KUBECONFIG=~/jenkins_home/.kube/config
                 kubectl apply -f k8s/FrontendDeployment.yaml --validate=false
                 kubectl apply -f k8s/BackendDeployment.yaml --validate=false
                 kubectl apply -f k8s/mongo-k8s.yml --validate=false
@@ -92,6 +92,8 @@ pipeline {
         stage("ingress service"){
             steps{
                 sh '''
+                set -e
+                export KUBECONFIG=~/jenkins_home/.kube/config
                 kubectl create ingress product-localhost --class=nginx --rule="product.localdev.me/*=front-end:80"
                 kubectl create ingress server-localhost --class=nginx --rule="server.localdev.me/*=node-app:5000"
 
