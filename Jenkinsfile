@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKERHUB_CREDENTIALS_ID = 'dockerhub-creds'  
-        FRONTEND_TAG = 'frontend2'
+        FRONTEND_TAG = 'frontend3'
         BACKEND_TAG = 'back-end'
         DOCKERHUB_USERNAME = 'omarismail0'            
         DOCKERHUB_REPOSITORY = 'kubernetes-project'   
