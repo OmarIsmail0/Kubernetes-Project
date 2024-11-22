@@ -92,6 +92,8 @@ pipeline {
         stage("ingress service"){
             steps{
                 sh '''
+                set -e
+                export KUBECONFIG=~/jenkins_home/.kube/config
                 kubectl create ingress front-localhost --class=nginx \
                 --rule="front.localdev.me/*=product:80"
 
