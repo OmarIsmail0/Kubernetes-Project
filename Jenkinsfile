@@ -84,20 +84,23 @@ pipeline {
                 sh '''
                 export KUBECONFIG=~/.kube/config
                 kubectl version --client
-                '''
-            }
-        }
-
-        stage('Apply Kubernetes Manifests') {
-            steps {
-                sh '''
-                set -e
-                export KUBECONFIG=~/.kube/config
                 kubectl apply -f k8s/FrontendDeployment.yaml --validate=false
                 kubectl apply -f k8s/BackendDeployment.yaml --validate=false
                 kubectl apply -f k8s/mongo-k8s.yml --validate=false
                 '''
             }
+        }
+
+        // stage('Apply Kubernetes Manifests') {
+        //     steps {
+        //         sh '''
+        //         set -e
+        //         export KUBECONFIG=~/.kube/config
+        //         kubectl apply -f k8s/FrontendDeployment.yaml --validate=false
+        //         kubectl apply -f k8s/BackendDeployment.yaml --validate=false
+        //         kubectl apply -f k8s/mongo-k8s.yml --validate=false
+        //         '''
+        //     }
         }
 
         stage('Apply Kubernetes Volumes') {
