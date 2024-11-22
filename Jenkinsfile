@@ -2,8 +2,8 @@ pipeline {
     agent any
     environment {
         DOCKERHUB_CREDENTIALS_ID = 'dockerhub-creds'  
-        FRONTEND_TAG = 'frontend3'
-        BACKEND_TAG = 'back-end'
+        FRONTEND_TAG = 'frontend4'
+        BACKEND_TAG = 'backend4'
         DOCKERHUB_USERNAME = 'omarismail0'            
         DOCKERHUB_REPOSITORY = 'kubernetes-project'   
         KUBECONFIG = '~/jenkins_home/.kube/config'     
@@ -29,34 +29,11 @@ pipeline {
             }
         }
 
-        
-        stage('Check Workspace') {
-            steps {
-                sh 'ls -R' // List all files and directories in the workspace
-            }
-        }
-        
-        
-        stage('Docker Login') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', 
-                                                    usernameVariable: 'DOCKER_USERNAME', 
-                                                    passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh """
-                        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin $DOCKER_REGISTRY
-                        """
-                    }
-                }
-            }
-        }
-        
 
         stage('Build Frontend Image') {
             steps {
                 dir('frontend'){
                     script {
-                        // docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}", "-f ./frontend/ .")
                         docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}")
                         docker.withRegistry('', DOCKERHUB_CREDENTIALS_ID) {
                             docker.image("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}").push("${FRONTEND_TAG}")
@@ -84,24 +61,21 @@ pipeline {
                 sh '''
                 export KUBECONFIG=~/jenkins_home/.kube/config
                 kubectl version --client
+                '''
+            }
+        }
+
+        stage('Apply Kubernetes Manifests') {
+            steps {
+                sh '''
+                set -e
+                export KUBECONFIG=~/.kube/config
                 kubectl apply -f k8s/FrontendDeployment.yaml --validate=false
                 kubectl apply -f k8s/BackendDeployment.yaml --validate=false
                 kubectl apply -f k8s/mongo-k8s.yml --validate=false
                 '''
             }
         }
-
-        // stage('Apply Kubernetes Manifests') {
-        //     steps {
-        //         sh '''
-        //         set -e
-        //         export KUBECONFIG=~/.kube/config
-        //         kubectl apply -f k8s/FrontendDeployment.yaml --validate=false
-        //         kubectl apply -f k8s/BackendDeployment.yaml --validate=false
-        //         kubectl apply -f k8s/mongo-k8s.yml --validate=false
-        //         '''
-        //     }
-        // }
 
         stage('Apply Kubernetes Volumes') {
             steps {
@@ -113,6 +87,20 @@ pipeline {
                 '''
             }
         }
+
+
+        stage("ingress service"){
+            steps{
+                sh '''
+                kubectl create ingress product-localhost --class=nginx --rule="product.localdev.me/*=front-end:80"
+                kubectl create ingress server-localhost --class=nginx --rule="server.localdev.me/*=node-app:5000"
+
+                kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8088:80
+                kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8089:5000
+                '''
+            }
+        }
+
     }
     post {
         always {

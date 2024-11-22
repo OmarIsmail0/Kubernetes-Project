@@ -44,7 +44,7 @@ function App() {
 
     axios
       .get("products", {
-        baseURL: "http://node-app.default.svc.cluster.local/",
+        baseURL: "server.localdev.me:8089",
       })
       .then((e) => setProducts(e.data))
       .catch((err) => console.log(err));
