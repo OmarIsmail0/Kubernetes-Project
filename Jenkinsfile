@@ -95,46 +95,24 @@ pipeline {
                 set -e
                 export KUBECONFIG=~/jenkins_home/.kube/config
                 kubectl create ingress front-localhost --class=nginx \
-                --rule="front.localdev.me/*=product:80"
+                --rule="front.localdev.me/*=frontend-app:80"
+
+                echo "Starting port forwarding for frontend..."
+                kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8090:80 &
 
                 kubectl create ingress server-localhost --class=nginx \
-                --rule="server.localdev.me/*=node-app:5000"  
-                '''
-            }
-        }
+                --rule="server.localdev.me/*=node-app:5000"   
 
-         stage('Port Forward Frontend') {
-            steps {
-                script {
-                    sh '''
-                    set -e
-                    export KUBECONFIG=~/jenkins_home/.kube/config
-                    echo "Starting port-forward for frontend..."
-                    kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8090:80 &
-                    '''
-                }
-            }
-        }
-        stage('Port Forward Backend') {
-            steps {
-                script {
-                    sh '''
-                    set -e
-                    export KUBECONFIG=~/jenkins_home/.kube/config
-                    echo "Starting port-forward for backend..."
-                    kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8091:80 &
-                    '''
-                }
+                echo "Starting port forwarding for backend..."
+                kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8089:80 &
+                '''
             }
         }
 
     }
     post {
         always {
-            script {
-                // Cleanup processes if required
-                sh "pkill -f 'kubectl port-forward'"
-            }
+            cleanWs()
         }
     }
 }
