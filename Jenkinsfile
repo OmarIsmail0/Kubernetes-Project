@@ -6,7 +6,7 @@ pipeline {
         BACKEND_TAG = 'back-end'
         DOCKERHUB_USERNAME = 'omarismail0'            
         DOCKERHUB_REPOSITORY = 'kubernetes-project'   
-        KUBECONFIG = '/root/.kube/config'     
+        KUBECONFIG = '~/jenkins_home/.kube/config'     
         DOCKER_REGISTRY = 'https://index.docker.io/v1/' // Update for custom registries
         
     }
@@ -82,7 +82,7 @@ pipeline {
         stage('Test kubectl') {
             steps {
                 sh '''
-                export KUBECONFIG=~/.kube/config
+                export KUBECONFIG=~/jenkins_home/.kube/config
                 kubectl version --client
                 kubectl apply -f k8s/FrontendDeployment.yaml --validate=false
                 kubectl apply -f k8s/BackendDeployment.yaml --validate=false
@@ -107,7 +107,7 @@ pipeline {
             steps {
                 sh '''
                 set -e
-                export KUBECONFIG=~/.kube/config
+                export KUBECONFIG=~/jenkins_home/.kube/config
                 kubectl create -f k8s/presistent_volume.yml --validate=false
                 kubectl create -f k8s/presistent_volume_claim.yml --validate=false
                 '''
