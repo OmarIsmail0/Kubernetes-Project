@@ -77,16 +77,16 @@ pipeline {
             }
         }
 
-        stage('Apply Kubernetes Volumes') {
-            steps {
-                sh '''
-                set -e
-                export KUBECONFIG=~/jenkins_home/.kube/config
-                kubectl create -f k8s/presistent_volume.yml --validate=false
-                kubectl create -f k8s/presistent_volume_claim.yml --validate=false
-                '''
-            }
-        }
+        // stage('Apply Kubernetes Volumes') {
+        //     steps {
+        //         sh '''
+        //         set -e
+        //         export KUBECONFIG=~/jenkins_home/.kube/config
+        //         kubectl create -f k8s/presistent_volume.yml --validate=false
+        //         kubectl create -f k8s/presistent_volume_claim.yml --validate=false
+        //         '''
+        //     }
+        // }
 
 
         stage("ingress service"){
