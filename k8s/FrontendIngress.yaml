@@ -4,7 +4,7 @@ metadata:
   name: product-localhost
   namespace: default # Change if needed
   annotations:
-    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: frontend-app
 spec:
   rules:
     - host: product.localdev.me
