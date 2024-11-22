@@ -94,11 +94,9 @@ pipeline {
                 sh '''
                 set -e
                 export KUBECONFIG=~/jenkins_home/.kube/config
-                kubectl create ingress product-localhost --class=nginx --rule="product.localdev.me/*=front-end:80"
-                kubectl create ingress server-localhost --class=nginx --rule="server.localdev.me/*=node-app:5000"
-
-                kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8088:80
-                kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8089:5000
+                kubectl apply -f product-ingress.yaml
+                kubectl apply -f server-ingress.yaml
+                kubectl apply -f nodeport-service.yaml
                 '''
             }
         }
