@@ -94,9 +94,9 @@ pipeline {
                 sh '''
                 set -e
                 export KUBECONFIG=~/jenkins_home/.kube/config
-                kubectl apply -f product-ingress.yaml
-                kubectl apply -f server-ingress.yaml
-                kubectl apply -f nodeport-service.yaml
+                kubectl apply -f k8s/product-ingress.yaml
+                kubectl apply -f k8s/server-ingress.yaml
+                kubectl apply -f k8s/nodeport-service.yaml
                 '''
             }
         }
