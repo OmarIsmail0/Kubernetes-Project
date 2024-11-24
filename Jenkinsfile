@@ -6,7 +6,7 @@ pipeline {
         BACKEND_TAG = 'backend5'
         DOCKERHUB_USERNAME = 'omarismail0'            
         DOCKERHUB_REPOSITORY = 'kubernetes-project'   
-        KUBECONFIG = '~/jenkins_home/.kube/config'     
+        KUBECONFIGPATH = '~/.kube/config'     
         DOCKER_REGISTRY = 'https://index.docker.io/v1/' // Update for custom registries
         
     }
@@ -59,7 +59,7 @@ pipeline {
         stage('Test kubectl') {
             steps {
                 sh '''
-                export KUBECONFIG=~/jenkins_home/.kube/config
+                export KUBECONFIG=$KUBECONFIGPATH
                 kubectl version --client
                 '''
             }
@@ -67,13 +67,15 @@ pipeline {
 
         stage('Apply Kubernetes Manifests') {
             steps {
-                sh '''
-                set -e
-                export KUBECONFIG=~/jenkins_home/.kube/config
-                kubectl apply -f k8s/FrontendDeployment.yaml --validate=false
-                kubectl apply -f k8s/BackendDeployment.yaml --validate=false
-                kubectl apply -f k8s/mongo-k8s.yml --validate=false
-                '''
+                withCredentials([file(credentialsId: 'kubeconfig-file', variable: 'KUBECONFIG')]) {
+                    sh '''
+                    set -e
+                    export KUBECONFIG=$KUBECONFIGPATH
+                    kubectl apply -f k8s/FrontendDeployment.yaml --validate=false
+                    kubectl apply -f k8s/BackendDeployment.yaml --validate=false
+                    kubectl apply -f k8s/mongo-k8s.yml --validate=false
+                    '''
+                }
             }
         }
 
@@ -81,7 +83,7 @@ pipeline {
         //     steps {
         //         sh '''
         //         set -e
-        //         export KUBECONFIG=~/jenkins_home/.kube/config
+        //         export KUBECONFIG=$KUBECONFIGPATH
         //         kubectl create -f k8s/presistent_volume.yml --validate=false
         //         kubectl create -f k8s/presistent_volume_claim.yml --validate=false
         //         '''
@@ -93,7 +95,7 @@ pipeline {
             steps{
                 sh '''
                 set -e
-                export KUBECONFIG=~/jenkins_home/.kube/config
+                export KUBECONFIG=$KUBECONFIGPATH
                 kubectl create ingress front-localhost --class=nginx \
                 --rule="front.localdev.me/*=frontend-app:80"
 
