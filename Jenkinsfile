@@ -59,7 +59,7 @@ pipeline {
         stage('Test kubectl') {
             steps {
                 sh '''
-                export KUBECONFIG=$KUBECONFIGPATH
+                export KUBECONFIG=~/.kube/config
                 kubectl version --client
                 '''
             }
@@ -70,7 +70,7 @@ pipeline {
                 withCredentials([file(credentialsId: 'kubeconfig-file', variable: 'KUBECONFIG')]) {
                     sh '''
                     set -e
-                    export KUBECONFIG=$KUBECONFIGPATH
+                    export KUBECONFIG=~/.kube/config
                     kubectl apply -f k8s/FrontendDeployment.yaml --validate=false
                     kubectl apply -f k8s/BackendDeployment.yaml --validate=false
                     kubectl apply -f k8s/mongo-k8s.yml --validate=false
@@ -83,7 +83,7 @@ pipeline {
         //     steps {
         //         sh '''
         //         set -e
-        //         export KUBECONFIG=$KUBECONFIGPATH
+        //         export KUBECONFIG=~/.kube/config
         //         kubectl create -f k8s/presistent_volume.yml --validate=false
         //         kubectl create -f k8s/presistent_volume_claim.yml --validate=false
         //         '''
@@ -95,7 +95,7 @@ pipeline {
             steps{
                 sh '''
                 set -e
-                export KUBECONFIG=$KUBECONFIGPATH
+                export KUBECONFIG=~/.kube/config
                 kubectl create ingress front-localhost --class=nginx \
                 --rule="front.localdev.me/*=frontend-app:80"
 
