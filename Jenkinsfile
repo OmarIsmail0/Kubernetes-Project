@@ -5,10 +5,7 @@ pipeline {
         FRONTEND_TAG = 'frontend5'
         BACKEND_TAG = 'backend5'
         DOCKERHUB_USERNAME = 'omarismail0'            
-        DOCKERHUB_REPOSITORY = 'kubernetes-project'   
-        KUBECONFIG = '~/jenkins_home/.kube/config'     
-        DOCKER_REGISTRY = 'https://index.docker.io/v1/' // Update for custom registries
-        
+        DOCKERHUB_REPOSITORY = 'kubernetes-project'           
     }
     stages {
         stage('Hello') {
@@ -107,11 +104,6 @@ pipeline {
                 kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8089:80 &
                 '''
             }
-        }
-
-    }
-    post {
-        always {
         }
     }
 }
