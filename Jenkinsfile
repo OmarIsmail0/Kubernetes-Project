@@ -27,31 +27,31 @@ pipeline {
         }
 
 
-        stage('Build Frontend Image') {
-            steps {
-                dir('frontend'){
-                    script {
-                        docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}")
-                        docker.withRegistry('', DOCKERHUB_CREDENTIALS_ID) {
-                            docker.image("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}").push("${FRONTEND_TAG}")
-                        }
-                    }
-                }
-            }
-        }
+        // stage('Build Frontend Image') {
+        //     steps {
+        //         dir('frontend'){
+        //             script {
+        //                 docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}")
+        //                 docker.withRegistry('', DOCKERHUB_CREDENTIALS_ID) {
+        //                     docker.image("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${FRONTEND_TAG}").push("${FRONTEND_TAG}")
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
-        stage('Build Backend Image') {
-            steps {
-                dir('backend') {
-                    script {
-                        docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${BACKEND_TAG}")
-                        docker.withRegistry('', DOCKERHUB_CREDENTIALS_ID) {
-                            docker.image("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${BACKEND_TAG}").push("${BACKEND_TAG}")
-                        }
-                    }
-                }
-            }
-        }
+        // stage('Build Backend Image') {
+        //     steps {
+        //         dir('backend') {
+        //             script {
+        //                 docker.build("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${BACKEND_TAG}")
+        //                 docker.withRegistry('', DOCKERHUB_CREDENTIALS_ID) {
+        //                     docker.image("${DOCKERHUB_USERNAME}/${DOCKERHUB_REPOSITORY}:${BACKEND_TAG}").push("${BACKEND_TAG}")
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Test kubectl') {
             steps {
