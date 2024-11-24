@@ -45,7 +45,7 @@ spec:
   type: NodePort
   ports:
     - port: 5000
-      targetPort: 5000
+      targetPort: 8089
       nodePort: 30020
   selector:
     app: node-app
