@@ -67,15 +67,13 @@ pipeline {
 
         stage('Apply Kubernetes Manifests') {
             steps {
-                withCredentials([file(credentialsId: 'kubeconfig-file', variable: 'KUBECONFIG')]) {
-                    sh '''
-                    set -e
-                    export KUBECONFIG=~/.kube/config
-                    kubectl apply -f k8s/FrontendDeployment.yaml --validate=false
-                    kubectl apply -f k8s/BackendDeployment.yaml --validate=false
-                    kubectl apply -f k8s/mongo-k8s.yml --validate=false
-                    '''
-                }
+                sh '''
+                set -e
+                export KUBECONFIG=~/.kube/config
+                kubectl apply -f k8s/FrontendDeployment.yaml --validate=false
+                kubectl apply -f k8s/BackendDeployment.yaml --validate=false
+                kubectl apply -f k8s/mongo-k8s.yml --validate=false
+                '''
             }
         }
 
