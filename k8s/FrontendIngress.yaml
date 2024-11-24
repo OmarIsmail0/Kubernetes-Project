@@ -1,13 +1,13 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: product-localhost
+  name: front-localhost
   namespace: default # Change if needed
   annotations:
     kubernetes.io/ingress.class: frontend-app
 spec:
   rules:
-    - host: product.localdev.me
+    - host: front.localdev.me:8090
       http:
         paths:
           - path: /
