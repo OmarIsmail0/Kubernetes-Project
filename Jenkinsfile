@@ -91,6 +91,7 @@ pipeline {
                 sh '''
                 set -e
                 export KUBECONFIG=~/jenkins_home/.kube/config
+                kubectl delete ingress --all
                 kubectl create ingress front-localhost --class=nginx \
                 --rule="front.localdev.me/*=frontend-app:80"
 
